@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class DieGame 
 {
 	static String p1 = "Player 1";
@@ -9,13 +11,31 @@ public class DieGame
 	static boolean game = false;
 	static boolean loaded1 = false;
 	static boolean loaded2 = true;
+	static boolean fileOutput = false;
 	static int winningNumber;
 	static int kicker;
 	static int sides = 6;
 	static int dice = 5;
+	static int exit = 0;
+	static int game1Ties = 0;
+	static int game2Ties = 0;
+	static int player1Game1Wins = 0;
+	static int player2Game1Wins = 0;
+	static int player1Game2Wins = 0;
+	static int player2Game2Wins = 0;
 	static String[] codes = {"Five of a Kind", "Four of a Kind", "Three of a Kind", "Pair", "High Card"};
-	public DieGame()
+	public static void main(String[] args)
 	{
+		manualGame();
+		run1000Games();
+		run1000LoadedGames();
+		output();
+	}
+	public static void dieGame(boolean output)
+	{
+		tied = false;
+		trueTie = false;
+		game = false;
 		int[] p1count = new int[sides];
 		int[] p2count = new int[sides];
 		FiveDice roll1 = new FiveDice(loaded1);
@@ -90,10 +110,11 @@ public class DieGame
 				if (kick == true)
 					break;
 			}
-		}	
-		display();
+		} 
+		if(output = false)
+			display();
 	}
-	static boolean check5(int a, int b, int c)
+	public static boolean check5(int a, int b, int c)
 	{
 		if (a == 5 && b == 5)
 		{
@@ -122,7 +143,7 @@ public class DieGame
 		else
 			return false;
 	}
-	static boolean check4(int a, int b, int c)
+	public static boolean check4(int a, int b, int c)
 	{
 		if (a == 4 && b == 4)
 		{
@@ -149,7 +170,7 @@ public class DieGame
 		else
 			return false;
 	}
-	static boolean check3(int a, int b, int c)
+	public static boolean check3(int a, int b, int c)
 	{
 		if (a == 3 && b == 3)
 		{
@@ -176,7 +197,7 @@ public class DieGame
 		else
 			return false;
 	}
-	static boolean check2(int a, int b, int c)
+	public static boolean check2(int a, int b, int c)
 	{
 		if (a == 2 && b == 2)
 		{
@@ -203,7 +224,7 @@ public class DieGame
 		else
 			return false;
 	}
-	static boolean check1(int a, int b, int c)
+	public static boolean check1(int a, int b, int c)
 	{
 		if(a == b)
 			return false;
@@ -224,7 +245,7 @@ public class DieGame
 		else
 			return false;
 	}
-	static boolean tieBreaker(int a, int b, int c)
+	public static boolean tieBreaker(int a, int b, int c)
 	{
 		if(winningNumber == (c + 1))
 			return false;
@@ -248,13 +269,61 @@ public class DieGame
 		else
 			return false;
 	}
-	static void display()
+	public static void display()
 	{
 		if (trueTie == true)
 			System.out.println("Players tied with a " + winningCombo + " of " + winningNumber + "s with a " + kicker + " kicker!");
 		System.out.print(winner + " won with a " + winningCombo + " of " + winningNumber + "s");
 		if (tied == true)
 			System.out.print(" and a " + kicker + " kicker.");
+	}
+	public static void manualGame()
+	{
+		Scanner in = new Scanner(System.in);
+		while (true)
+		{
+			dieGame(fileOutput);
+			System.out.println("\nEnter 0 to quit or anything to play again");
+			
+			if (in.next().charAt(0) == '0')
+				break;
+		}
+		in.close();
+	}
+	public static void run1000Games()
+	{
+		fileOutput = true;
+		for (int i = 0; i < 1000; ++i)
+			dieGame(fileOutput);
+			outputPrep();
+	}
+	public static void run1000LoadedGames()
+	{
+		loaded2 = true;
+		run1000Games();
+		outputPrep2();
+	}
+	public static void outputPrep()
+	{
+		if(trueTie == true)
+			++game1Ties;
+		if(winner.equals(p1))
+			++player1Game1Wins;
+		if(winner.equals(p2))
+			++player2Game1Wins;
+	}
+	public static void outputPrep2()
+	{
+		if(trueTie == true)
+			++game2Ties;
+		if(winner.equals(p1))
+			++player1Game2Wins;
+		if(winner.equals(p2))
+			++player2Game2Wins;
+	}
+	public static void output()
+	{
+		
 	}
 }
 
